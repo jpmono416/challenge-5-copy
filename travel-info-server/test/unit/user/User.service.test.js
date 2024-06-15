@@ -11,7 +11,6 @@ describe("User Service", () => {
                 _id: "1",
                 username: "test",
                 password: "test",
-                favouriteLocations: [],
             };
             const saveStub = sinon.stub(User.prototype, "save").returns(newUser);
 

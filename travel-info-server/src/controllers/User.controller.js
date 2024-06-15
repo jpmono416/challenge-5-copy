@@ -3,11 +3,11 @@ import UserService from "../services/User.service.js";
 export default class UserController {
     static createUser = async (req, res) => {
         try {
-            if (!req.body.username || !req.body.password)
+            if (!req.body)
                 return res.status(400).json({ error: "Invalid user" });
 
-            const user = await UserService.createUser(req.body.username, req.body.password);
-            if (!user) throw new Error("Unable to create user");
+            const user = await UserService.createUser(req.body);
+            if (!user._id) throw new Error("Unable to create user");
 
             res.status(201).json(user);
         } catch (error) {
@@ -33,8 +33,11 @@ export default class UserController {
             if (!req.body.username || !req.body.location)
                 return res.status(400).json({ error: "Invalid user or location" });
 
-            const user = await UserService.addFavouriteLocation(req.body.username, req.body.location);
-            if(!user) return res.status(404).json({ error: "User not found" });
+            const user = await UserService.addFavouriteLocation(
+                req.body.username,
+                req.body.location
+            );
+            if (!user) return res.status(404).json({ error: "User not found" });
 
             res.status(200).json(user);
         } catch (error) {
