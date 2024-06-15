@@ -2,7 +2,10 @@
   "name": "travel-info-server",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+    "start": "SET NODE_ENV=dev&&nodemon src/index.js",
+    "start-mac": "NODE_ENV=dev nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jonathan Perez",
