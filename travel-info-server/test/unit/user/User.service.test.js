@@ -7,13 +7,18 @@ import UserService from "../../../src/services/User.service.js";
 describe("User Service", () => {
     describe("createUser", () => {
         it("should create a user", async () => {
-            const user = { username: "test", password: "test" };
-            const createStub = sinon.stub(User, "create").returns(user);
+            const newUser = {
+                _id: "1",
+                username: "test",
+                password: "test",
+                favouriteLocations: [],
+            };
+            const saveStub = sinon.stub(User.prototype, "save").returns(newUser);
 
-            const result = await UserService.createUser(user.username, user.password);
+            const result = await UserService.createUser(newUser);
 
-            expect(result).to.equal(user);
-            createStub.restore();
+            expect(result).to.equal(newUser);
+            saveStub.restore();
         });
     });
 
