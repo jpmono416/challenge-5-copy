@@ -5,7 +5,13 @@ export default class UserValidator {
         try {
             return [
                 expressValidator.body("_id").optional().isMongoId(),
-                expressValidator.body("email").isString().notEmpty(),
+                expressValidator
+                    .body("email")
+                    .isString()
+                    .notEmpty()
+                    .matches(
+                        /^(?:(?:[a-zA-Z0-9_'^&/+-]|(?:\.(?!\.))){1,64}(?:(?:(?:\.(?!\.))[a-zA-Z0-9_'^&/+-]){1,64})*)@(?:(?:[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,})|(?:"(?:[^\\"\r\n]|(?:\\[\s\S]))*"))$/
+                    ),
                 expressValidator.body("password").isString().notEmpty(),
                 expressValidator.body("favouriteLocations").optional().isArray(),
                 UserValidator.handleValidationErrors,
