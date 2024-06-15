@@ -6,7 +6,7 @@
   "scripts": {
     "start": "SET NODE_ENV=dev&&nodemon src/index.js",
     "start-mac": "NODE_ENV=dev nodemon src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "SET NODE_ENV=test&&mocha --timeout 10000 --exit --recursive"
   },
   "author": "Jonathan Perez",
   "license": "ISC",

@@ -12,7 +12,6 @@ export default class UserService {
     static addFavouriteLocation = async (username, location) => {
         const user = await User.findOne({ username: username });
         user.favouriteLocations.push(location);
-        await user.save();
-        return user;
+        return await user.save();
     }
 }
