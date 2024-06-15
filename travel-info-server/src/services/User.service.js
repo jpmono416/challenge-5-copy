@@ -11,12 +11,12 @@ export default class UserService {
         return await user.save(user);
     };
 
-    static getUserByUsername = async (username) => {
-        return await User.findOne({ username: username });
+    static getUserByEmail = async (email) => {
+        return await User.findOne({ email: email });
     };
 
-    static addFavouriteLocation = async (username, location) => {
-        const user = await User.findOne({ username: username });
+    static addFavouriteLocation = async (email, location) => {
+        const user = await User.findOne({ email: email });
         user.favouriteLocations.push(location);
         return await user.save();
     };

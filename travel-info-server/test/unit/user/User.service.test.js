@@ -9,7 +9,7 @@ describe("User Service", () => {
         it("should create a user", async () => {
             const newUser = {
                 _id: "1",
-                username: "test",
+                email: "test",
                 password: "test",
             };
             const saveStub = sinon.stub(User.prototype, "save").returns(newUser);
@@ -21,12 +21,12 @@ describe("User Service", () => {
         });
     });
 
-    describe("getUserByUsername", () => {
-        it("should get a user by username", async () => {
-            const user = { username: "test", password: "test" };
+    describe("getUserByEmail", () => {
+        it("should get a user by email", async () => {
+            const user = { email: "test", password: "test" };
             const findOneStub = sinon.stub(User, "findOne").returns(user);
 
-            const result = await UserService.getUserByUsername(user.username);
+            const result = await UserService.getUserByEmail(user.email);
 
             expect(result).to.equal(user);
             findOneStub.restore();
@@ -36,7 +36,7 @@ describe("User Service", () => {
     describe("addFavouriteLocation", () => {
         it("should add a favourite location to a user", async () => {
             const user = {
-                username: "test",
+                email: "test",
                 password: "test",
                 favouriteLocations: [],
                 // Mocking the save method, used after findOne returns the mock
@@ -45,7 +45,7 @@ describe("User Service", () => {
             const findOneStub = sinon.stub(User, "findOne").returns(user);
             const saveStub = sinon.stub(User.prototype, "save").returns(user);
 
-            const result = await UserService.addFavouriteLocation(user.username, "location");
+            const result = await UserService.addFavouriteLocation(user.email, "location");
 
             expect(result).to.equal(user);
             findOneStub.restore();

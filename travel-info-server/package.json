@@ -6,7 +6,8 @@
   "scripts": {
     "start": "SET NODE_ENV=dev&&nodemon src/index.js",
     "start-mac": "NODE_ENV=dev nodemon src/index.js",
-    "test": "SET NODE_ENV=test&&mocha --timeout 10000 --exit --recursive"
+    "test": "SET NODE_ENV=test&&mocha --timeout 10000 --exit --recursive",
+    "coverage": "SET NODE_ENV=test&&c8 -r html npm run test-win"
   },
   "author": "Jonathan Perez",
   "license": "ISC",

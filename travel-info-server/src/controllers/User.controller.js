@@ -15,11 +15,11 @@ export default class UserController {
         }
     };
 
-    static getUserByUsername = async (req, res) => {
+    static getUserByEmail = async (req, res) => {
         try {
-            if (!req.params.username) return res.status(400).json({ error: "Invalid username" });
-
-            const user = await UserService.getUserByUsername(req.params.username);
+            if (!req.params) return res.status(400).json({ error: "Invalid email" });
+            console.log("PARAMS", req.params);
+            const user = await UserService.getUserByEmail(req.params.email);
             if (!user) return res.status(404).json({ error: "User not found" });
 
             res.status(200).json(user);
@@ -30,11 +30,11 @@ export default class UserController {
 
     static addFavouriteLocation = async (req, res) => {
         try {
-            if (!req.body.username || !req.body.location)
+            if (!req.body.email || !req.body.location)
                 return res.status(400).json({ error: "Invalid user or location" });
 
             const user = await UserService.addFavouriteLocation(
-                req.body.username,
+                req.body.email,
                 req.body.location
             );
             if (!user) return res.status(404).json({ error: "User not found" });

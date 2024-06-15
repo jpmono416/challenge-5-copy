@@ -10,7 +10,7 @@ describe("User Controller", () => {
     beforeEach(() => {
         req = {
             body: {},
-            params: { id: "1", username: "test"},
+            params: { id: "1", email: "test"},
         };
         res = {
             json: sinon.spy(),
@@ -22,7 +22,7 @@ describe("User Controller", () => {
         it("should create a user", async () => {
             const newUser = {
                 _id: "1",
-                username: "test",
+                email: "test",
                 password: "test",
             };
             const createStub = sinon.stub(UserService, "createUser").resolves(newUser);
@@ -41,7 +41,7 @@ describe("User Controller", () => {
         });
 
         it("should return 500 if createUser returns a user without an id", async () => {
-            const newUser = { username: "test", password: "test" };
+            const newUser = { email: "test", password: "test" };
             const createUserStub = sinon.stub(UserService, "createUser").resolves(newUser);
 
             await UserController.createUser(req, res);
@@ -51,28 +51,28 @@ describe("User Controller", () => {
         });
     });
 
-    describe("getUserByUsername", () => {
-        it("should get a user by username", async () => {
-            const user = { username: "test", password: "test" };
-            const getUserStub = sinon.stub(UserService, "getUserByUsername").resolves(user);
-
-            await UserController.getUserByUsername(req, res);
+    describe("getUserByEmail", () => {
+        it("should get a user by email", async () => {
+            const user = { email: "test", password: "test" };
+            const getUserStub = sinon.stub(UserService, "getUserByEmail").resolves(user);
+            
+            await UserController.getUserByEmail(req, res);
 
             expect(res.status.calledWith(200)).to.be.true;
             getUserStub.restore();
         });
 
-        it.skip("should return 400 if req has null params", async () => {
+        it("should return 400 if req has null params", async () => {
             req.params = null;
-            await UserController.getUserByUsername(req, res);
+            await UserController.getUserByEmail(req, res);
 
             expect(res.status.calledWith(400)).to.be.true;
         });
 
-        it.skip("should return 404 if getUserByUsername returns null", async () => {
-            const getUserStub = sinon.stub(UserService, "getUserByUsername").resolves(null);
+        it("should return 404 if getUserByEmail returns null", async () => {
+            const getUserStub = sinon.stub(UserService, "getUserByEmail").resolves(null);
 
-            await UserController.getUserByUsername(req, res);
+            await UserController.getUserByEmail(req, res);
 
             expect(res.status.calledWith(404)).to.be.true;
             getUserStub.restore();

@@ -5,7 +5,7 @@ export default class UserValidator {
         try {
             return [
                 expressValidator.body("_id").optional().isMongoId(),
-                expressValidator.body("username").isString().notEmpty(),
+                expressValidator.body("email").isString().notEmpty(),
                 expressValidator.body("password").isString().notEmpty(),
                 expressValidator.body("favouriteLocations").optional().isArray(),
                 UserValidator.handleValidationErrors,
