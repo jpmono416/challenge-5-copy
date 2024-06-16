@@ -3,6 +3,7 @@
 # Software Overview: Backend Services
 
 </center>
+
 ## Introduction
 
 In today's digital age, backend services have become a cornerstone of business operations, enabling companies to manage, process, and store data efficiently. These services form the backbone of applications, supporting the frontend and ensuring seamless user experiences. This backend service manages the data and business logic of the Travel Info application. It provides a secure, scalable, and reliable infrastructure for storing and processing user information and their favourite locations.
@@ -31,4 +32,4 @@ In today's digital age, backend services have become a cornerstone of business o
 3. **Increased User Base**: The convenience and personalization features of the app, such as saving favorite locations, can attract more users, expanding the customer base.
 4. **Ad Revenue Potential**: With increased user engagement and a growing user base, there's potential for generating ad revenue by displaying relevant advertisements alongside the weather forecasts.
 
-In conclusion, by focusing on providing accurate weather forecasts and allowing users to save their favorite locations, the app delivers personalized and valuable information, enhancing user satisfaction. This, in turn, drives user engagement and offers significant business benefits, including opportunities for growth and revenue generation.
+By focusing on providing accurate weather forecasts and allowing users to save their favorite locations, the page can prove useful for anyone on a daily basis.
