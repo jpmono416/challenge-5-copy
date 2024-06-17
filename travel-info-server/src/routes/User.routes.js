@@ -13,10 +13,11 @@ export default class UserRoutes {
 
     #initializeRoutes = () => {
         // User
-        this.#router.get("/:username", UserController.getUserByUsername);
+        this.#router.get("/:email", UserController.getUserByEmail);
         this.#router.post("/", UserValidator.validate(), UserController.createUser);
         this.#router.post("/login", UserValidator.validate(), UserController.loginUser)
-
+        this.#router.put("/changePassword", UserValidator.validate(), UserController.changePassword);
+        
         // Locations
         this.#router.post(
             "/favourite-location",

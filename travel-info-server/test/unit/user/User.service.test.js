@@ -74,4 +74,31 @@ describe("User Service", () => {
             findOneStub.restore();
         });
     });
+
+    describe("Change password", () => {
+        it("should change password", async () => {
+            const user = {
+                email: "test",
+                password: "test",
+                favouriteLocations: [],
+                save: sinon.stub().returnsThis(),
+            };
+
+            const newUser = user;
+            newUser.password = "newPassword"
+
+            const findOneStub = sinon.stub(User, "findOne").returns(user);
+
+            const result = await UserService.changePassword(user.email, user.password, newUser.password);
+            expect(result).to.equal(newUser);
+            findOneStub.restore();
+        });
+
+        it("should return nothing if no user is found", async () => {
+            const findOneStub = sinon.stub(User, "findOne").returns(null);
+            const result = await UserService.changePassword("test", "test", "newPassword");
+            expect(result).to.be.undefined;
+            findOneStub.restore();
+        });
+    });
 });

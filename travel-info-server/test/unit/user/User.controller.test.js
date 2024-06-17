@@ -114,4 +114,35 @@ describe("User Controller", () => {
             loginUserStub.restore();
         });
     });
+
+    describe("Change password", () => {
+        beforeEach(() => {
+            req.body = { email: "test", password: "test", newPassword: "new" };
+        });
+        it("should change password", async () => {
+            const user = { email: "test", password: "new" };
+            const changePasswordStub = sinon.stub(UserService, "changePassword").resolves(user);
+
+            await UserController.changePassword(req, res);
+
+            expect(res.status.calledWith(200)).to.be.true;
+            changePasswordStub.restore();
+        });
+
+        it("should return a 404 if no user is found", async () => {
+            const changePasswordStub = sinon.stub(UserService, "changePassword").resolves(null);
+
+            await UserController.changePassword(req, res);
+
+            expect(res.status.calledWith(404)).to.be.true;
+            changePasswordStub.restore();
+        });
+
+        it("should return a 400 if req has null body params", async () => {
+            req.body = null;
+            await UserController.changePassword(req, res);
+
+            expect(res.status.calledWith(400)).to.be.true;
+        });
+    });
 });

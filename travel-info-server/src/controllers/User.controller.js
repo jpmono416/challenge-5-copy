@@ -56,5 +56,23 @@ export default class UserController {
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
-    }
+    };
+
+    static changePassword = async (req, res) => {
+        try {
+            if (!req.body || !req.body.email || !req.body.password || !req.body.newPassword)
+                return res.status(400).json({ error: "Invalid email, old password or new password" });
+
+            const user = await UserService.changePassword(
+                req.body.email,
+                req.body.password,
+                req.body.newPassword
+            );
+            if (!user) return res.status(404).json({ error: "User not found" });
+
+            res.status(200).json(user);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    };
 }
