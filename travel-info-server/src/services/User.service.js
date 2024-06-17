@@ -46,4 +46,15 @@ export default class UserService {
     const user = await UserService.getUserByEmail(email);
     return user?.favouriteLocations;
   };
+
+  static removeFavouriteLocation = async(email, location) => {
+    const user = await UserService.getUserByEmail(email);
+    
+    if(!user) return;
+
+    user.favouriteLocations = user.favouriteLocations.filter(
+      (favLocation) => favLocation !== location
+    );
+    return await user.save();
+  };
 }

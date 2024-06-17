@@ -184,4 +184,42 @@ describe("User Controller", () => {
             getFavouriteLocationsStub.restore();
         });
     });
+
+    describe("Remove favourite locations", () =>{
+        beforeEach(() => {
+            req.body = { email: "test", location: "Paris" };
+        });
+
+        it("should remove a favourite location", async () => {
+            const user = { email: "test", password: "test", favLocations: ["London"]};
+            user.favLocations.push("Paris");
+            const removeFavouriteLocationStub = sinon.stub(UserService, "removeFavouriteLocation").resolves(user);
+
+            await UserController.removeFavouriteLocation(req, res);
+            expect(res.status.calledWith(200)).to.be.true;
+            removeFavouriteLocationStub.restore();
+        });
+
+        it("should return 500 if req has null body", async () => {
+            req.body = null;
+            await UserController.removeFavouriteLocation(req, res);
+
+            expect(res.status.calledWith(500)).to.be.true;
+        });
+
+        it("should return 400 if req body is missing email or location", async () => {
+            req.body = { email: "test" };
+            await UserController.removeFavouriteLocation(req, res);
+
+            expect(res.status.calledWith(400)).to.be.true;
+        });
+
+        it("should return 404 if removeFavouriteLocation returns nothing", async () => {
+            const removeFavouriteLocationStub = sinon.stub(UserService, "removeFavouriteLocation").resolves(undefined);
+
+            await UserController.removeFavouriteLocation(req, res);
+            expect(res.status.calledWith(404)).to.be.true;
+            removeFavouriteLocationStub.restore();
+        });
+    });
 });

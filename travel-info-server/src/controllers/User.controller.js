@@ -87,4 +87,21 @@ export default class UserController {
             res.status(500).json({ error: error.message });
         }
     };
+
+    static removeFavouriteLocation = async (req, res) => {
+        try {
+            if (!req.body.email || !req.body.location)
+                return res.status(400).json({ error: "Invalid email or location" });
+
+            const user = await UserService.removeFavouriteLocation(
+                req.body.email,
+                req.body.location
+            );
+            if (!user) return res.status(404).json({ error: "User not found" });
+
+            res.status(200).json(user);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    };
 }

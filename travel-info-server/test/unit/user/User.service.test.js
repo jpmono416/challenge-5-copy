@@ -136,4 +136,44 @@ describe("User Service", () => {
             findOneStub.restore();
         });
     });
+
+    describe("Remove favourite location", () => {
+        it("should remove a favourite location", async () => {
+            const user = {
+                email: "test",
+                password: "test",
+                favouriteLocations: ["Paris", "London"],
+                save: sinon.stub().returnsThis(),
+            };
+            const newUser = user;
+            newUser.favouriteLocations = ["Paris"];
+
+            const findOneStub = sinon.stub(User, "findOne").returns(user);
+
+            const result = await UserService.removeFavouriteLocation(user.email, "London");
+            expect(result).to.equal(newUser);
+            findOneStub.restore();
+        });
+
+        it("should return nothing if no user is found", async () => {
+            const findOneStub = sinon.stub(User, "findOne").returns(null);
+            const result = await UserService.removeFavouriteLocation("test", "location");
+            expect(result).to.be.undefined;
+            findOneStub.restore();
+        });
+
+        it("should return unmodified user if location is not in user's favourite locations", async () => {
+            const user = {
+                email: "test",
+                password: "test",
+                favouriteLocations: ["Paris", "London"],
+                save: sinon.stub().returnsThis(),
+            };
+            const findOneStub = sinon.stub(User, "findOne").returns(user);
+
+            const result = await UserService.removeFavouriteLocation(user.email, "New York");
+            expect(result).to.equal(user);
+            findOneStub.restore();
+        });
+    });
 });
