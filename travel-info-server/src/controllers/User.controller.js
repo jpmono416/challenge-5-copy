@@ -75,4 +75,16 @@ export default class UserController {
             res.status(500).json({ error: error.message });
         }
     };
+
+    static getFavouriteLocations = async (req, res) => {
+        try {
+            if (!req.query) return res.status(400).json({ error: "Invalid email" });
+            const locations = await UserService.getFavouriteLocations(req.query.email);
+            if (!locations) return res.status(404).json({ error: "User not found" });
+
+            res.status(200).json(locations);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    };
 }

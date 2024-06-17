@@ -19,6 +19,7 @@ export default class UserRoutes {
         this.#router.put("/changePassword", UserValidator.validate(), UserController.changePassword);
         
         // Locations
+        this.#router.get("/getFavLocations", UserController.getFavouriteLocations);
         this.#router.post(
             "/favourite-location",
             UserValidator.validate(),

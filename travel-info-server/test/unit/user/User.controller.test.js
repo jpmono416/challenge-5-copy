@@ -145,4 +145,43 @@ describe("User Controller", () => {
             expect(res.status.calledWith(400)).to.be.true;
         });
     });
+
+    describe("Get favourite locations", () => {
+        beforeEach(() => {
+            req.query = { email: "test" };
+        });
+
+        it("should get favourite locations", async () => {
+            const locations = ["Paris", "London"];
+
+            const getFavouriteLocationsStub = sinon.stub(UserService, "getFavouriteLocations").resolves(locations);
+
+            await UserController.getFavouriteLocations(req, res);
+            expect(res.status.calledWith(200)).to.be.true;
+            getFavouriteLocationsStub.restore();
+        });
+
+        it("should return 400 if req has null query params", async () => {
+            req.query = null;
+            await UserController.getFavouriteLocations(req, res);
+
+            expect(res.status.calledWith(400)).to.be.true;
+        });
+
+        it("should return 404 if getFavouriteLocations returns nothing", async () => {
+            const getFavouriteLocationsStub = sinon.stub(UserService, "getFavouriteLocations").resolves(undefined);
+
+            await UserController.getFavouriteLocations(req, res);
+            expect(res.status.calledWith(404)).to.be.true;
+            getFavouriteLocationsStub.restore();
+        });
+
+        it("should return a 200 when no favourite locations are found", async () => {
+            const getFavouriteLocationsStub = sinon.stub(UserService, "getFavouriteLocations").resolves([]);
+
+            await UserController.getFavouriteLocations(req, res);
+            expect(res.status.calledWith(200)).to.be.true;
+            getFavouriteLocationsStub.restore();
+        });
+    });
 });

@@ -101,4 +101,39 @@ describe("User Service", () => {
             findOneStub.restore();
         });
     });
+
+    describe("Get favourite locations", () => {
+        it("should get favourite locations", async () => {
+            const user = {
+                email: "test",
+                password: "test",
+                favouriteLocations: ["location1", "location2"],
+            };
+            const findOneStub = sinon.stub(User, "findOne").returns(user);
+
+            const result = await UserService.getFavouriteLocations(user.email);
+            expect(result).to.equal(user.favouriteLocations);
+            findOneStub.restore();
+        });
+
+        it("should return nothing if no user is found", async () => {
+            const findOneStub = sinon.stub(User, "findOne").returns(null);
+            const result = await UserService.getFavouriteLocations("test");
+            expect(result).to.be.undefined;
+            findOneStub.restore();
+        });
+
+        it("should return empty array if user has no favourite locations", async () => {
+            const user = {
+                email: "test",
+                password: "test",
+                favouriteLocations: [],
+            };
+            const findOneStub = sinon.stub(User, "findOne").returns(user);
+
+            const result = await UserService.getFavouriteLocations(user.email);
+            expect(result).to.eql([]);
+            findOneStub.restore();
+        });
+    });
 });

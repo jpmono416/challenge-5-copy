@@ -15,12 +15,6 @@ export default class UserService {
     return await User.findOne({ email: email });
   };
 
-  static addFavouriteLocation = async (email, location) => {
-    const user = await UserService.getUserByEmail(email);
-    user.favouriteLocations.push(location);
-    return await user.save();
-  };
-
   static loginUser = async (email, password) => {
     try {
       const user = await UserService.getUserByEmail(email);
@@ -40,5 +34,16 @@ export default class UserService {
     } catch (error) {
       throw new Error("Invalid user details: " + error.message);
     }
+  };
+
+  static addFavouriteLocation = async (email, location) => {
+    const user = await UserService.getUserByEmail(email);
+    user.favouriteLocations.push(location);
+    return await user.save();
+  };
+
+  static getFavouriteLocations = async(email) => {
+    const user = await UserService.getUserByEmail(email);
+    return user?.favouriteLocations;
   };
 }
