@@ -43,4 +43,18 @@ export default class UserController {
             res.status(500).json({ error: error.message });
         }
     };
+
+    static loginUser = async (req, res) => {
+        try {
+            if (!req.body.email || !req.body.password) 
+                return res.status(400).json({ error: "Invalid email or password" });
+
+            const user = await UserService.loginUser(req.body.email, req.body.password);
+            if (!user) return res.status(404).json({ error: "User not found" });
+
+            res.status(200).json(user);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 }

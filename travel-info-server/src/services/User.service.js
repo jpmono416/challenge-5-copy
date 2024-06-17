@@ -16,8 +16,14 @@ export default class UserService {
     };
 
     static addFavouriteLocation = async (email, location) => {
-        const user = await User.findOne({ email: email });
+        const user = await UserService.getUserByEmail(email);
         user.favouriteLocations.push(location);
         return await user.save();
     };
+
+    static loginUser = async(email, password) => {
+        const user = await UserService.getUserByEmail(email);
+        if(user?.password === password)
+            return user;
+    }
 }

@@ -12,8 +12,12 @@ export default class UserRoutes {
     }
 
     #initializeRoutes = () => {
-        this.#router.post("/", UserValidator.validate(), UserController.createUser);
+        // User
         this.#router.get("/:username", UserController.getUserByUsername);
+        this.#router.post("/", UserValidator.validate(), UserController.createUser);
+        this.#router.post("/login", UserValidator.validate(), UserController.loginUser)
+
+        // Locations
         this.#router.post(
             "/favourite-location",
             UserValidator.validate(),
