@@ -52,4 +52,26 @@ describe("User Service", () => {
             saveStub.restore();
         });
     });
+
+    describe("Login user", () => {
+        it("should login a user", async () => {
+            const user = {
+                email: "test",
+                password: "test",
+                favouriteLocations: [],
+            };
+            const findOneStub = sinon.stub(User, "findOne").returns(user);
+            
+            const result = await UserService.loginUser(user.email, user.password);
+            expect(result).to.equal(user);
+            findOneStub.restore();
+        });
+
+        it("should return nothing if no user is found", async () => {
+            const findOneStub = sinon.stub(User, "findOne").returns(null);
+            const result = await UserService.loginUser("test", "test");
+            expect(result).to.be.undefined;
+            findOneStub.restore();
+        });
+    });
 });

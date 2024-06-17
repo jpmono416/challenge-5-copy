@@ -78,4 +78,40 @@ describe("User Controller", () => {
             getUserStub.restore();
         });
     });
+
+    describe("login", () => {
+
+        beforeEach(() => {
+            req.body = { email: "test", password: "test" };
+        
+        });
+        it("should login a user", async () => {
+            const user = { email: "test", password: "test" };
+            const loginUserStub = sinon.stub(UserService, "loginUser").resolves(user);
+
+            await UserController.loginUser(req, res);
+
+            expect(res.status.calledWith(200)).to.be.true;
+            loginUserStub.restore();
+        });
+
+        it("should return a 404 if no user is found", async () => {
+            const loginUserStub = sinon.stub(UserService, "loginUser").resolves(null);
+
+            await UserController.loginUser(req, res);
+
+            expect(res.status.calledWith(404)).to.be.true;
+            loginUserStub.restore();
+        });
+
+        it("should return a 400 if req has null body params", async () => {
+            const loginUserStub = sinon.stub(UserService, "loginUser").resolves(null);
+            req.body = null;
+            
+            await UserController.loginUser(req, res);
+
+            expect(res.status.calledWith(500)).to.be.true;
+            loginUserStub.restore();
+        });
+    });
 });
