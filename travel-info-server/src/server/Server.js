@@ -1,6 +1,7 @@
 import express from "express";
 import UserRoutes from "../routes/User.routes.js";
 import WeatherApiRoutes from "../routes/WeatherApi.routes.js";
+import cors from "cors";
 
 export default class Server {
     #app;
@@ -24,11 +25,18 @@ export default class Server {
     };
 
     start = () => {
+        const corsOptions = {
+            origin: "http://localhost:5173",
+        };
+
         this.#server = this.#app.listen(this.#port, this.#host, () => {
             console.log(`Server is listening on http://${this.#host}:${this.#port}`);
         });
 
         this.#app.use(express.json());
+        this.#app.use(cors(corsOptions));
+
+        // Routers
         this.#app.use(this.#userRouter.getRouteStartPoint(), this.#userRouter.getRouter());
         this.#app.use(
             this.#weatherApiRouter.getRouteStartPoint(),
