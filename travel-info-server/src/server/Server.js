@@ -1,18 +1,22 @@
 import express from "express";
+import UserRoutes from "../routes/User.routes.js";
+import WeatherApiRoutes from "../routes/WeatherApi.routes.js";
 
 export default class Server {
     #app;
     #host;
     #port;
-    #router;
     #server;
+    #userRouter;
+    #weatherApiRouter;
 
-    constructor(port, host, router) {
+    constructor(port, host) {
         this.#app = express();
         this.#port = port;
         this.#host = host;
         this.#server = null;
-        this.#router = router;
+        this.#userRouter = new UserRoutes();
+        this.#weatherApiRouter = new WeatherApiRoutes();
     }
 
     getApp = () => {
@@ -21,15 +25,14 @@ export default class Server {
 
     start = () => {
         this.#server = this.#app.listen(this.#port, this.#host, () => {
-            console.log(
-                `Server is listening on http://${this.#host}:${this.#port}`
-            );
+            console.log(`Server is listening on http://${this.#host}:${this.#port}`);
         });
-        
+
         this.#app.use(express.json());
+        this.#app.use(this.#userRouter.getRouteStartPoint(), this.#userRouter.getRouter());
         this.#app.use(
-            this.#router.getRouteStartPoint(),
-            this.#router.getRouter()
+            this.#weatherApiRouter.getRouteStartPoint(),
+            this.#weatherApiRouter.getRouter()
         );
     };
 
