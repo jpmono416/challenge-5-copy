@@ -4,7 +4,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "start-render": "nodemon src/index.js",
+        "start-render": "node src/index.js",
         "start": "NODE_ENV=dev nodemon src/index.js",
         "build": "npm install",
         "test": "NODE_ENV=test mocha --timeout 10000 --exit --recursive",
