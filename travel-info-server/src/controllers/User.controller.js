@@ -3,13 +3,11 @@ import UserService from "../services/User.service.js";
 export default class UserController {
     static createUser = async (req, res) => {
         try {
-            if (!req.body)
-                return res.status(400).json({ error: "Invalid user" });
+            if (!req.body) return res.status(400).json({ error: "Invalid user" });
 
-            const user = await UserService.createUser(req.body);
-            if (!user._id) throw new Error("Unable to create user");
+            const { user, token } = await UserService.createUser(req.body);
 
-            res.status(201).json(user);
+            res.status(201).json({ user, token });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -32,10 +30,7 @@ export default class UserController {
             if (!req.body.email || !req.body.location)
                 return res.status(400).json({ error: "Invalid user or location" });
 
-            const user = await UserService.addFavouriteLocation(
-                req.body.email,
-                req.body.location
-            );
+            const user = await UserService.addFavouriteLocation(req.body.email, req.body.location);
             if (!user) return res.status(404).json({ error: "User not found" });
 
             res.status(200).json(user);
@@ -46,7 +41,7 @@ export default class UserController {
 
     static loginUser = async (req, res) => {
         try {
-            if (!req.body.email || !req.body.password) 
+            if (!req.body.email || !req.body.password)
                 return res.status(400).json({ error: "Invalid email or password" });
 
             const user = await UserService.loginUser(req.body.email, req.body.password);
@@ -61,7 +56,9 @@ export default class UserController {
     static changePassword = async (req, res) => {
         try {
             if (!req.body || !req.body.email || !req.body.password || !req.body.newPassword)
-                return res.status(400).json({ error: "Invalid email, old password or new password" });
+                return res
+                    .status(400)
+                    .json({ error: "Invalid email, old password or new password" });
 
             const user = await UserService.changePassword(
                 req.body.email,

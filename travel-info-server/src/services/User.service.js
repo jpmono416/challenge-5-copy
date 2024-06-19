@@ -1,60 +1,70 @@
 import User from "../models/User.model.js";
+import jwt from "jsonwebtoken";
 
 export default class UserService {
-  static createUser = async (newUser) => {
-    let user;
-    try {
-      user = new User(newUser);
-    } catch (error) {
-      throw new Error("Invalid user: " + error.message);
-    }
-    return await user.save(user);
-  };
+    static createUser = async (newUser) => {
+        console.log("New user: ", newUser);
+        try {
+            const user = new User(newUser);
+            await user.save(user);
 
-  static getUserByEmail = async (email) => {
-    return await User.findOne({ email: email });
-  };
+            console.log("USer:", user);
+            const token = jwt.sign({ userId: user._id }, "FLAWLESS_NKRYPTION", {
+                expiresIn: "24h",
+            });
+            console.log("Token:", token);
 
-  static loginUser = async (email, password) => {
-    try {
-      const user = await UserService.getUserByEmail(email);
-      if (user?.password === password) return user;
-    } catch (error) {
-      throw new Error("Invalid user details: " + error.message);
-    }
-  };
+            return { user, token };
+        } catch (error) {
+            console.log("Error:", error.message);
+            throw new Error("Invalid user: " + error.message);
+        }
+    };
 
-  static changePassword = async (email, password, newPassword) => {
-    try {
-      const user = await UserService.loginUser(email, password);
-      if (user) {
-        user.password = newPassword;
+    static getUserByEmail = async (email) => {
+        return await User.findOne({ email: email });
+    };
+
+    static loginUser = async (email, password) => {
+        try {
+            const user = await UserService.getUserByEmail(email);
+            if (user?.password === password) return user;
+        } catch (error) {
+            throw new Error("Invalid user details: " + error.message);
+        }
+    };
+
+    static changePassword = async (email, password, newPassword) => {
+        try {
+            const user = await UserService.loginUser(email, password);
+            if (user) {
+                user.password = newPassword;
+                return await user.save();
+            }
+        } catch (error) {
+            throw new Error("Invalid user details: " + error.message);
+        }
+    };
+
+    static addFavouriteLocation = async (email, location) => {
+        const user = await UserService.getUserByEmail(email);
+        user.favouriteLocations.push(location);
         return await user.save();
-      }
-    } catch (error) {
-      throw new Error("Invalid user details: " + error.message);
-    }
-  };
+    };
 
-  static addFavouriteLocation = async (email, location) => {
-    const user = await UserService.getUserByEmail(email);
-    user.favouriteLocations.push(location);
-    return await user.save();
-  };
+    static getFavouriteLocations = async (email) => {
+        const user = await UserService.getUserByEmail(email);
+        return user?.favouriteLocations;
+    };
 
-  static getFavouriteLocations = async(email) => {
-    const user = await UserService.getUserByEmail(email);
-    return user?.favouriteLocations;
-  };
+    static removeFavouriteLocation = async (email, location) => {
+        const user = await UserService.getUserByEmail(email);
 
-  static removeFavouriteLocation = async(email, location) => {
-    const user = await UserService.getUserByEmail(email);
-    
-    if(!user) return;
+        if (!user) return;
 
-    user.favouriteLocations = user.favouriteLocations.filter(
-      (favLocation) => favLocation !== location
-    );
-    return await user.save();
-  };
+        user.favouriteLocations = user.favouriteLocations.filter(
+            (favLocation) => favLocation !== location
+        );
+        return await user.save();
+    };
 }
