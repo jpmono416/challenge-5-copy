@@ -1,22 +1,22 @@
-import User from "../models/User.model.js";
 import jwt from "jsonwebtoken";
+
+import Config from "../config/Config.js";
+import User from "../models/User.model.js";
 
 export default class UserService {
     static createUser = async (newUser) => {
-        console.log("New user: ", newUser);
         try {
+            Config.load();
+            const { JWT_SECRET } = process.env;
             const user = new User(newUser);
             await user.save(user);
 
-            console.log("USer:", user);
-            const token = jwt.sign({ userId: user._id }, "FLAWLESS_NKRYPTION", {
+            const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
                 expiresIn: "24h",
             });
-            console.log("Token:", token);
 
             return { user, token };
         } catch (error) {
-            console.log("Error:", error.message);
             throw new Error("Invalid user: " + error.message);
         }
     };
@@ -28,7 +28,14 @@ export default class UserService {
     static loginUser = async (email, password) => {
         try {
             const user = await UserService.getUserByEmail(email);
-            if (user?.password === password) return user;
+            if (user?.password !== password) return;
+
+            Config.load();
+            const { JWT_SECRET } = process.env;
+            const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
+                expiresIn: "24h",
+            });
+            return { user, token };
         } catch (error) {
             throw new Error("Invalid user details: " + error.message);
         }
